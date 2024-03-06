@@ -2,3 +2,4 @@
 https://github.com/Tasyanadila/Proyek-Analisis-Data.git
 
 -link streamlit
+http://192.168.1.6:8501/
