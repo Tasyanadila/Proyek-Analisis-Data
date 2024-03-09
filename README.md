@@ -10,8 +10,7 @@ pip install -r requirements.txt
 
 ```
 cd Proyek-Analisis-Data
-cd dashboard
-streamlit run dashboard.py
+streamlit run Dashboard/dashboard.py
 ```
 
 ### Run streamlit
@@ -24,7 +23,7 @@ link dataset: https://www.kaggle.com/datasets/lakshmi25npathi/bike-sharing-datas
 Bike-sharing system adalah generasi baru dari persewaan sepeda tradisional di mana seluruh proses mulai dari keanggotaan, penyewaan, dan pengembalian menjadi otomatis. Melalui sistem ini, pengguna dapat dengan mudah menyewa sepeda dari posisi tertentu dan kembali lagi ke posisi lain
 
 ### Ringkasan Dataset
-Kedua data `day.csv` dan `hour.csv` memiliki attribut seperti dibawah ini, kecuali attribut `hr (hour)` yang hanya ada di data `hour.csv` dan tidak ada di data `day.csv` : 
+Kedua data `day.csv` dan `hour.csv` memiliki attribut seperti dibawah ini, kecuali attribut `hr (hour)` yang hanya ada di data `hour.csv` dan tidak ada di data `day.csv`. Dibawah ini merupakan attribut dari data bike_hour_df.csv (dataframe dari hour.csv) yang telah di proses:
 	
 - `instant`: record index
 - `date`: date
@@ -44,8 +43,8 @@ Kedua data `day.csv` dan `hour.csv` memiliki attribut seperti dibawah ini, kecua
 	- `atemp`: Normalized feeling temperature in Celsius. The values are divided into 50 (max)
 	- `humidity`: Normalized humidity. The values are divided into 100 (max)
 	- `windspeed`: Normalized wind speed. The values are divided into 67 (max)
-	- `casual`: count of casual users
-	- `registered`: count of registered users
-	- `Total`: count of total rental bikes including both casual and registered
+	- `casual_count`: count of casual users
+	- `registered_count`: count of registered users
+	- `Total_count`: count of total rental bikes including both casual and registered
 
 
