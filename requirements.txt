@@ -4,3 +4,4 @@ matplotlib
 Pillow
 seaborn
 plotly
+scikit-learn
