@@ -57,29 +57,43 @@ if selected_analysis == "Dataset Overview":
 elif selected_analysis == "Visualization":
     # Title
     st.title("Bike-Sharing Dashboard") 
-    
 
     # Total Bike User Section
     total_users = bike_hour_df["total_count"].sum()
     casual_users = bike_hour_df["casual_count"].sum()
     registered_users = bike_hour_df["registered_count"].sum()
 
+    # Custom CSS to increase font size
+    st.markdown(
+        """
+        <style>
+             .big-blue-text {
+                font-size: 24px;
+                font-weight: bold;
+                color: blue;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     # Display Total Users
     col1, col2, col3 = st.columns(3)
 
     with col1:
         st.subheader("Total Users")
-        st.write(total_users)
+        st.write(f'<p class="big-blue-text">{total_users}</p>', unsafe_allow_html=True)
 
     # Display Casual Users
     with col2:
         st.subheader("Casual Users")
-        st.write(casual_users)
+        st.write(f'<p class="big-blue-text">{casual_users}</p>', unsafe_allow_html=True)
 
     # Display Registered Users
     with col3:
         st.subheader("Registered Users")
-        st.write(registered_users)
+        st.write(f'<p class="big-blue-text"">{registered_users}</p>', unsafe_allow_html=True)
+
 
     
     ### Plot 1
@@ -233,4 +247,25 @@ elif selected_analysis == "Conclusion":
     st.subheader("Plot4: Clustering Analisis untuk melihat korelasi antara temperature dengan jumlah bike rental dengan menggunakan K-means")
     st.markdown("order bike-sharing memiliki nilai maksimum di summer dan nilai minimum di winter. Visualisasi yang ditampilkan sejalan dengan visualisasi yang ada di pertanyaan nomor 3. Dari hasil korelasi pertanyaan nomor 4 disimpulkan bahwa seiring dengan meningkatnya temperature orderan bike-sharing juga akan meningkat, puncaknya ada di musim summer. Dengan kata lain dapat dikatakan bahwa suhu yang lebih tinggi umumnya terkait dengan jumlah persewaan sepeda yang lebih tinggi. Peningkatan suhu dapat mendorong lebih banyak orang untuk menyewa sepeda.")
 
+    st.subheader("Hasil analisa teknik clustering")
+    st.markdown("Scatter plot ini menunjukkan titik data yang sama seperti plot (plot4) diatas tetapi diwarnai dengan label cluster yang ditetapkan setelah pengelompokan dengan menggunakan K-Means. Terdapat juga cluster center yang akan memahami untuk melihar nilai rata-rata fitur (temperature) untuk setiap cluster.")
+    st.subheader("1. untuk n=2")
+    st.markdown("Terdapat dua cluster yang berbeda dalam data.")
+    st.markdown("- Cluster 0  memiliki temperature rendah dan total sewa rendah, yang mana dapat mewakilkan musim dingin dan musim semi.")
+    st.markdown("- Cluster 1  memiliki temperature tinggi dan total sewa tinggi, yang mana dapat mewakilkan musim panas dan musim gugur.")
+    st.markdown("- Semakin tinggi nilai temperature (suhu) semakin tinggi pula total sewa bike-sharingnya.")
+
+    st.subheader("2. untuk n=3")
+    st.markdown("Terdapat 3 cluster yang berbeda dalam data.")
+    st.markdown("- cluster 0 memiliki temperature sedang dengan total sewa sedang")
+    st.markdown("- cluster 1 memiliki temperature tinggi dengan sewa tertinggi")
+    st.markdown("- cluster 2 memiliki temperature rendah dengan sewa terendah")
+
+    st.subheader("3. untuk n=4")
+    st.markdown("Terdapat 4 cluster yang berbeda dalam data")
+    st.markdown("- cluster 0 memiliki suhu agak rendah dengan sewa agak rendah, cluster ini mewakili musim semi")
+    st.markdown("- cluster 1 memiliki suhu tinggi dengan jumlah sewa yang tertinggi, cluster ini mewakili musim panas (summer)")
+    st.markdown("- cluster 2 memiliki suhu rendah dengan sewa terendah, cluster ini mewakili musim dingin")
+    st.markdown("- cluster 3 memiliki suhu sedang dengan jumlah sewa sedang, cluster ini mewakili musim gugur")
+    
     st.caption('Copyright © Tasya Nadila')
