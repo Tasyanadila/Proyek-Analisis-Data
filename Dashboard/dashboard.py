@@ -5,8 +5,6 @@ from PIL import Image
 import streamlit as st
 import seaborn as sn
 import plotly.express as px
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
 
 import os
 
@@ -120,6 +118,17 @@ elif selected_analysis == "Visualization":
 
     # Menampilkan plot menggunakan st.pyplot
     st.pyplot(fig1)
+    
+    st.subheader("Boxplot jumlah rata-rata sewa sepeda berdasarkan weather situation (kondisi cuaca)")
+    # Boxplot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    box_plot = sn.boxplot(x="weathersit", y="total_count", data=bike_hour_df, ax=ax)
+    plt.title("Pengaruh Cuaca Terhadap Jumlah Sewa Sepeda")
+    plt.xlabel("Weathersit")
+    plt.ylabel("Jumlah Sewa Sepeda")
+
+    # Display the boxplot using Streamlit
+    st.pyplot(fig)
 
     ### Plot 2
     st.subheader("Plot 2: Trend penggunaan sepeda berdasarkan bulan")
@@ -145,7 +154,7 @@ elif selected_analysis == "Visualization":
     plt.xticks(rotation=45)
     st.pyplot(fig)  # Menggunakan st.pyplot untuk menampilkan plot di Streamlit
     
-    # Plot 3: Bar chart total orders of bikeshare rides per Seasons
+    # Plot 3: Bar chart dan pie chart total orders of bikeshare rides per Seasons
     st.subheader("Plot 3: Bar chart total orders of bikeshare rides per Seasons")
 
     # Set the figure size
@@ -166,63 +175,32 @@ elif selected_analysis == "Visualization":
 
     # Show the plot
     st.pyplot(plt)
+    
+    st.subheader("pie chart total orders of bikeshare rides per seasons")
+    
+    # Set the figure size
+    plt.figure(figsize=(6, 6))
+    
+    # Menghitung total rides per season
+    season_total_rides = bike_hour_df.groupby('season')['total_count'].sum().reset_index()
+
+    # Show pie chart using Streamlit
+    plt.pie(season_total_rides['total_count'], labels=season_total_rides['season'], autopct='%1.1f%%', startangle=90, colors=sn.color_palette('pastel'))
+    plt.title('Distribution of Total Rides by Season')
+
+    # Display the pie chart using Streamlit
+    st.pyplot(plt)
 
     ### Plot 4
-    # Scatter plot untuk melihat hubungan antara temperature dan total bike rental
-
-    # Sidebar untuk pengaturan jumlah cluster
-    num_clusters = st.sidebar.slider("Jumlah Cluster", 2, 3, 4)
-
-    # Scatter plot untuk melihat hubungan antara temperature dan total bike rental
-    st.subheader(f"Scatter plot - Hubungan antara suhu dan total sewa sepeda (Jumlah Cluster: {num_clusters})")
-
-    # Set the figure size
-    plt.figure(figsize=(10, 6))
-
-    # Create a scatter plot using the sn.scatterplot() function
-    sn.scatterplot(x='temperature', y='total_count', hue='season', data=bike_hour_df)
-
-    # Add labels and a title to the plot
+    st.subheader("Plot 4: Scatter plot untuk melihat hubungan antara temperature dan total bike rental")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    scatter_plot = sn.scatterplot(x='temperature', y='total_count', hue='season', data=bike_hour_df, ax=ax)
     plt.xlabel('Temperature')
     plt.ylabel('Total Bike Rentals')
     plt.title('Correlation Between Temperature and Total Bike Rentals')
 
-    # Show the plot
-    st.pyplot(plt)
-
-    # Feature selection
-    features = ['temperature']
-
-    # Feature scaling
-    scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(bike_hour_df[features])
-
-    # KMeans clustering
-    kmeans = KMeans(n_clusters=num_clusters, random_state=42)
-    bike_hour_df['cluster'] = kmeans.fit_predict(scaled_data)
-
-    # Scatter plot dengan warna berdasarkan cluster
-    st.subheader(f'K-Means Clustering - {num_clusters} Clusters')
-
-    # Set the figure size
-    plt.figure(figsize=(10, 6))
-
-    # Create a scatter plot using the sn.scatterplot() function
-    sn.scatterplot(x='temperature', y='total_count', hue='cluster', data=bike_hour_df)
-
-    # Add labels and a title to the plot
-    plt.xlabel('Temperature')
-    plt.ylabel('Total Bike Rentals')
-    plt.title(f'K-Means Clustering - {num_clusters} Clusters')
-
-    # Show the plot
-    st.pyplot(plt)
-
-    # Menampilkan karakteristik setiap cluster
-    cluster_centers = scaler.inverse_transform(kmeans.cluster_centers_)
-    st.write("Cluster Centers:")
-    st.write(cluster_centers)
-
+    # Display the plot using Streamlit
+    st.pyplot(fig)
 
     st.caption('Copyright © Tasya Nadila')
     
@@ -232,40 +210,21 @@ elif selected_analysis == "Conclusion":
     st.title("Kesimpulan")
 
     ### Conclusion pertanyaan 1 
-    st.subheader("Plot1: Barchart Jumlah rata-rata sewa sepeda berdasarkan weather situation dan impactnya ditahun 2011 dan 2012")
-    st.markdown("adalah benar bahwa kondisi cuaca (weather situation) mempengaruhi tingkat kenaikan ataupun penurunan jumlah rata-rata sewa sepeda. Kemudian ada sedikit perbedaan impact di tahun 2011 dan 2012. Dari visualisasi diketahui bahwa pada cuaca cerah (clear) rata-rata sewa sepeda tinggi di tahun 2012 dan 2011, sedangkan di cuaca misty dan light rain/snow rata-rata sewa sepeda turun, dan di cuaca heavy rain rata-rata sewa sepeda sangat rendah di tahun 2011 dan 2012.")
+    st.subheader("Plot1: Barchart dan boxplot Jumlah rata-rata sewa sepeda berdasarkan weather situation dan impactnya ditahun 2011 dan 2012")
+    st.markdown("Dari barchart dapat diketahui bahwa benar kondisi cuaca (weather situation) mempengaruhi tingkat kenaikan ataupun penurunan jumlah rata-rata sewa sepeda. Kemudian ada sedikit perbedaan impact di tahun 2011 dan 2012. Dari visualisasi diketahui bahwa pada cuaca cerah (clear) rata-rata sewa sepeda tinggi di tahun 2012 dan 2011, sedangkan di cuaca misty dan light rain/snow rata-rata sewa sepeda turun, dan di cuaca heavy rain rata-rata sewa sepeda sangat rendah di tahun 2011 dan 2012.")
+    st.markdown("Dari boxplot dapat diketahui bahwa cuaca cerah (clear) memiliki jumlah sewa sepeda yang paling tinggi, sedangkan heavy rain memiliki jumlah sewa sepeda yang paling rendah ")
 
     ### Conclution pertanyaan 2
     st.subheader("Plot2: Trend penggunaan sepeda berdasarkan bulan")
-    st.markdown("Trend penggunaan sepede relatif sama ditahun 2011 dan 2012, namun ditahun 2012 trend penggunaan sepeda lebih tinggi.")
+    st.markdown("Trend penggunaan sepeda relatif sama ditahun 2011 dan 2012, namun ditahun 2012 trend penggunaan sepeda lebih tinggi.")
   
     ### conclution pertanyaan 3
-    st.subheader("Plot3: Bar chart total orders of bikeshare rides per Seasons")
-    st.markdown("Musim panas (summer) merupakan musim dengan order sewa sepeda terbanyak di tahun 2011 dan 2012. Cuaca yang cerah, hangat, dan indah menjadi faktor utama yang mendorong tingginya order pada musim ini.")
-
+    st.subheader("Plot3: Bar chart dan pie chart total orders of bikeshare rides per Seasons")
+    st.markdown("Berdasarkan bar chart, musim panas (summer) merupakan musim dengan order sewa sepeda terbanyak di tahun 2011 dan 2012. Cuaca yang cerah, hangat, dan indah menjadi faktor utama yang mendorong tingginya order pada musim ini.")
+    st.markdown("Dari visualisasi pie chart dapat dilihat juga dengan jelas persebaran total sewa sepeda berdasarkan musim. Musim panas(summer) memiliki persentase yang paling tinggi dibandingkan musim lainnya.")
+    
     ### Conclusion pertanyaan 4
-    st.subheader("Plot4: Clustering Analisis untuk melihat korelasi antara temperature dengan jumlah bike rental dengan menggunakan K-means")
-    st.markdown("order bike-sharing memiliki nilai maksimum di summer dan nilai minimum di winter. Visualisasi yang ditampilkan sejalan dengan visualisasi yang ada di pertanyaan nomor 3. Dari hasil korelasi pertanyaan nomor 4 disimpulkan bahwa seiring dengan meningkatnya temperature orderan bike-sharing juga akan meningkat, puncaknya ada di musim summer. Dengan kata lain dapat dikatakan bahwa suhu yang lebih tinggi umumnya terkait dengan jumlah persewaan sepeda yang lebih tinggi. Peningkatan suhu dapat mendorong lebih banyak orang untuk menyewa sepeda.")
-
-    st.subheader("Hasil analisa teknik clustering")
-    st.markdown("Scatter plot ini menunjukkan titik data yang sama seperti plot (plot4) diatas tetapi diwarnai dengan label cluster yang ditetapkan setelah pengelompokan dengan menggunakan K-Means. Terdapat juga cluster center yang akan memahami untuk melihar nilai rata-rata fitur (temperature) untuk setiap cluster.")
-    st.subheader("1. untuk n=2")
-    st.markdown("Terdapat dua cluster yang berbeda dalam data.")
-    st.markdown("- Cluster 0  memiliki temperature rendah dan total sewa rendah, yang mana dapat mewakilkan musim dingin dan musim semi.")
-    st.markdown("- Cluster 1  memiliki temperature tinggi dan total sewa tinggi, yang mana dapat mewakilkan musim panas dan musim gugur.")
-    st.markdown("- Semakin tinggi nilai temperature (suhu) semakin tinggi pula total sewa bike-sharingnya.")
-
-    st.subheader("2. untuk n=3")
-    st.markdown("Terdapat 3 cluster yang berbeda dalam data.")
-    st.markdown("- cluster 0 memiliki temperature sedang dengan total sewa sedang")
-    st.markdown("- cluster 1 memiliki temperature tinggi dengan sewa tertinggi")
-    st.markdown("- cluster 2 memiliki temperature rendah dengan sewa terendah")
-
-    st.subheader("3. untuk n=4")
-    st.markdown("Terdapat 4 cluster yang berbeda dalam data")
-    st.markdown("- cluster 0 memiliki suhu agak rendah dengan sewa agak rendah, cluster ini mewakili musim semi")
-    st.markdown("- cluster 1 memiliki suhu tinggi dengan jumlah sewa yang tertinggi, cluster ini mewakili musim panas (summer)")
-    st.markdown("- cluster 2 memiliki suhu rendah dengan sewa terendah, cluster ini mewakili musim dingin")
-    st.markdown("- cluster 3 memiliki suhu sedang dengan jumlah sewa sedang, cluster ini mewakili musim gugur")
+    st.subheader("Plot4: scatterplot untuk melihat korelasi antara temperature dengan jumlah bike rental.")
+    st.markdown("Berdasarkan scatter-plot, order bike-sharing memiliki nilai maksimum di summer dan nilai minimum di winter. Visualisasi yang ditampilkan sejalan dengan visualisasi yang ada di pertanyaan nomor 3. Dari hasil korelasi pertanyaan nomor 4 disimpulkan bahwa seiring dengan meningkatnya temperature orderan bike-sharing juga akan meningkat, puncaknya ada di musim summer. Dengan kata lain dapat dikatakan bahwa suhu yang lebih tinggi umumnya terkait dengan jumlah persewaan sepeda yang lebih tinggi. Peningkatan suhu dapat mendorong lebih banyak orang untuk menyewa sepeda.")
     
     st.caption('Copyright © Tasya Nadila')

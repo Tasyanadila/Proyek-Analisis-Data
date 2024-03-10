@@ -3,6 +3,5 @@ numpy
 pandas
 pillow
 plotly
-scikit-learn
 seaborn
 streamlit
